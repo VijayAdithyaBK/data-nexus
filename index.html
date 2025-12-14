@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Vijay Adithya B K - Data Engineer crafting production-grade data platforms. Snowflake, Python, PostgreSQL specialist." />
+  <title>Vijay Adithya B K — Data Engineer</title>
+
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <!-- Cursor Follower -->
+  <div class="cursor" id="cursor">
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+  </div>
+
+  <!-- Three.js Canvas -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="preloader-content">
+      <div class="preloader-counter">
+        <span class="counter-number" id="counter">0</span>
+        <span class="counter-percent">%</span>
+      </div>
+      <div class="preloader-line">
+        <div class="preloader-progress" id="progress"></div>
+      </div>
+      <p class="preloader-text">INITIALIZING DATA PIPELINE</p>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <header class="header">
+    <nav class="nav">
+      <a href="#" class="nav-logo">
+        <span class="logo-text" data-text="VA">VA</span>
+      </a>
+
+      <div class="nav-menu">
+        <a href="#work" class="nav-link" data-index="01">Work</a>
+        <a href="#about" class="nav-link" data-index="02">About</a>
+        <a href="#expertise" class="nav-link" data-index="03">Expertise</a>
+        <a href="#journal" class="nav-link" data-index="04">Journal</a>
+        <a href="#contact" class="nav-link" data-index="05">Contact</a>
+      </div>
+
+      <div class="nav-info">
+        <span class="nav-status"><span class="status-dot"></span>Available</span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main id="smooth-content">
+
+    <!-- Hero Section -->
+    <section id="hero" class="section hero">
+      <div class="hero-background">
+        <div class="grain"></div>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="eyebrow-line"></span>
+          <span class="eyebrow-text">DATA ENGINEER</span>
+        </div>
+
+        <h1 class="hero-title">
+          <span class="title-line">
+            <span class="title-word" data-delay="0">Crafting</span>
+          </span>
+          <span class="title-line">
+            <span class="title-word" data-delay="1">Data</span>
+            <span class="title-word accent" data-delay="2">Architectures</span>
+          </span>
+          <span class="title-line">
+            <span class="title-word" data-delay="3">That</span>
+            <span class="title-word" data-delay="4">Scale</span>
+          </span>
+        </h1>
+
+        <div class="hero-meta">
+          <div class="meta-block">
+            <span class="meta-label">Based in</span>
+            <span class="meta-value">Bengaluru, India</span>
+          </div>
+          <div class="meta-block">
+            <span class="meta-label">Experience</span>
+            <span class="meta-value">4+ Years</span>
+          </div>
+          <div class="meta-block">
+            <span class="meta-label">Specialization</span>
+            <span class="meta-value">Snowflake • ETL/ELT</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-scroll">
+        <span class="scroll-text">Scroll</span>
+        <div class="scroll-line">
+          <div class="scroll-dot"></div>
+        </div>
+      </div>
+
+      <div class="hero-marquee">
+        <div class="marquee-track">
+          <span class="marquee-text">SNOWFLAKE • PYTHON • POSTGRESQL • DATA MODELING • ETL PIPELINES • QUERY
+            OPTIMIZATION • </span>
+          <span class="marquee-text">SNOWFLAKE • PYTHON • POSTGRESQL • DATA MODELING • ETL PIPELINES • QUERY
+            OPTIMIZATION • </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Work Section -->
+    <section id="work" class="section work">
+      <div class="section-header">
+        <div class="section-label">
+          <span class="label-index">01</span>
+          <span class="label-text">SELECTED WORK</span>
+        </div>
+        <h2 class="section-title">Projects that <br><em>deliver impact</em></h2>
+      </div>
+
+      <div class="work-grid">
+        <!-- Project 1 -->
+        <article class="work-item" data-project="snowflake">
+          <div class="work-visual">
+            <div class="work-image">
+              <div class="image-overlay"></div>
+              <div class="image-icon">❄️</div>
+            </div>
+            <span class="work-number">01</span>
+          </div>
+          <div class="work-content">
+            <div class="work-tags">
+              <span class="tag">Snowflake</span>
+              <span class="tag">Python</span>
+              <span class="tag">ELT</span>
+            </div>
+            <h3 class="work-title">Snowflake Reporting<br>ETL Pipelines</h3>
+            <p class="work-desc">Designed SQL-based ELT workflows loading flat files and API data into Snowflake staging
+              tables powering analytics dashboards.</p>
+            <div class="work-stats">
+              <div class="stat">
+                <span class="stat-value">40%</span>
+                <span class="stat-label">Cost Reduction</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value">10TB+</span>
+                <span class="stat-label">Data Processed</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="work-item" data-project="migration">
+          <div class="work-visual">
+            <div class="work-image">
+              <div class="image-overlay"></div>
+              <div class="image-icon">🔄</div>
+            </div>
+            <span class="work-number">02</span>
+          </div>
+          <div class="work-content">
+            <div class="work-tags">
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">SQL Server</span>
+              <span class="tag">Migration</span>
+            </div>
+            <h3 class="work-title">Data Migration<br>Validation Suite</h3>
+            <p class="work-desc">SQL audits and Python reconciliation scripts validating record counts and data
+              integrity across legacy to cloud migrations.</p>
+            <div class="work-stats">
+              <div class="stat">
+                <span class="stat-value">99.9%</span>
+                <span class="stat-label">Accuracy</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value">50M+</span>
+                <span class="stat-label">Records Validated</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="work-item" data-project="automation">
+          <div class="work-visual">
+            <div class="work-image">
+              <div class="image-overlay"></div>
+              <div class="image-icon">⚡</div>
+            </div>
+            <span class="work-number">03</span>
+          </div>
+          <div class="work-content">
+            <div class="work-tags">
+              <span class="tag">Python</span>
+              <span class="tag">Automation</span>
+              <span class="tag">Tooling</span>
+            </div>
+            <h3 class="work-title">Data Automation<br>Utility Framework</h3>
+            <p class="work-desc">Reusable Python framework for file processing, validation, alerting, and scheduled
+              cleanup of staging environments.</p>
+            <div class="work-stats">
+              <div class="stat">
+                <span class="stat-value">80%</span>
+                <span class="stat-label">Time Saved</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value">15+</span>
+                <span class="stat-label">Tools Built</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 4 -->
+        <article class="work-item" data-project="quality">
+          <div class="work-visual">
+            <div class="work-image">
+              <div class="image-overlay"></div>
+              <div class="image-icon">🛡️</div>
+            </div>
+            <span class="work-number">04</span>
+          </div>
+          <div class="work-content">
+            <div class="work-tags">
+              <span class="tag">SQL</span>
+              <span class="tag">Monitoring</span>
+              <span class="tag">Quality</span>
+            </div>
+            <h3 class="work-title">Data Quality<br>Monitoring System</h3>
+            <p class="work-desc">Comprehensive monitoring suite detecting schema drift, null values, mismatches, and
+              completeness issues across pipelines.</p>
+            <div class="work-stats">
+              <div class="stat">
+                <span class="stat-value">100+</span>
+                <span class="stat-label">Checks Active</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value">24/7</span>
+                <span class="stat-label">Monitoring</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about">
+      <div class="about-layout">
+        <div class="about-intro">
+          <div class="section-label">
+            <span class="label-index">02</span>
+            <span class="label-text">ABOUT</span>
+          </div>
+          <h2 class="about-headline">
+            I transform raw data into <em>actionable intelligence</em> that drives business decisions.
+          </h2>
+        </div>
+
+        <div class="about-details">
+          <div class="about-bio">
+            <p>With 4+ years at Accenture, I've architected production-grade data platforms serving enterprise clients.
+              My expertise spans the complete data lifecycle—from ingestion to visualization.</p>
+            <p>I believe great data engineering is invisible: systems that just work, pipelines that never fail, and
+              queries that return in milliseconds.</p>
+          </div>
+
+          <div class="about-experience">
+            <div class="experience-item">
+              <div class="exp-header">
+                <h3 class="exp-role">Custom Software Engineering Analyst</h3>
+                <span class="exp-date">2021 — Present</span>
+              </div>
+              <p class="exp-company">Accenture</p>
+              <ul class="exp-list">
+                <li>Snowflake warehouse optimization reducing costs by 40%</li>
+                <li>Python ETL automation for enterprise data pipelines</li>
+                <li>PostgreSQL schema design and query tuning</li>
+                <li>Cross-functional delivery in Agile teams</li>
+              </ul>
+            </div>
+
+            <div class="experience-item">
+              <div class="exp-header">
+                <h3 class="exp-role">Bachelor of Engineering</h3>
+                <span class="exp-date">2017 — 2021</span>
+              </div>
+              <p class="exp-company">Dayananda Sagar Academy of Technology and Management</p>
+              <p class="exp-detail">Information Science & Engineering • Bengaluru</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Expertise Section -->
+    <section id="expertise" class="section expertise">
+      <div class="section-header">
+        <div class="section-label">
+          <span class="label-index">03</span>
+          <span class="label-text">EXPERTISE</span>
+        </div>
+        <h2 class="section-title">Tools of <br><em>the trade</em></h2>
+      </div>
+
+      <div class="expertise-grid">
+        <div class="expertise-category">
+          <h3 class="category-name">Data Engineering</h3>
+          <div class="skill-list">
+            <div class="skill-item">
+              <span class="skill-name">Snowflake</span>
+              <span class="skill-level">Expert</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">ETL/ELT Pipelines</span>
+              <span class="skill-level">Expert</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Data Modeling</span>
+              <span class="skill-level">Advanced</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Query Optimization</span>
+              <span class="skill-level">Expert</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Data Migration</span>
+              <span class="skill-level">Advanced</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="expertise-category">
+          <h3 class="category-name">Programming</h3>
+          <div class="skill-list">
+            <div class="skill-item">
+              <span class="skill-name">Python</span>
+              <span class="skill-level">Expert</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">SQL</span>
+              <span class="skill-level">Expert</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">JavaScript / TypeScript</span>
+              <span class="skill-level">Intermediate</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Shell Scripting</span>
+              <span class="skill-level">Intermediate</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="expertise-category">
+          <h3 class="category-name">Databases</h3>
+          <div class="skill-list">
+            <div class="skill-item">
+              <span class="skill-name">PostgreSQL</span>
+              <span class="skill-level">Expert</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">MySQL</span>
+              <span class="skill-level">Advanced</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Teradata</span>
+              <span class="skill-level">Intermediate</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="expertise-category">
+          <h3 class="category-name">DevOps & Tools</h3>
+          <div class="skill-list">
+            <div class="skill-item">
+              <span class="skill-name">Docker</span>
+              <span class="skill-level">Intermediate</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Git / GitHub</span>
+              <span class="skill-level">Advanced</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-name">Splunk</span>
+              <span class="skill-level">Intermediate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="certifications">
+        <h4 class="cert-title">Certifications</h4>
+        <div class="cert-list">
+          <span class="cert-badge">SQL (Advanced) — HackerRank</span>
+          <span class="cert-badge">Python (Basic) — HackerRank</span>
+          <span class="cert-badge">Python Libraries for Data Science — Simplilearn</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Journal Section -->
+    <section id="journal" class="section journal">
+      <div class="section-header">
+        <div class="section-label">
+          <span class="label-index">04</span>
+          <span class="label-text">JOURNAL</span>
+        </div>
+        <h2 class="section-title">Thoughts & <br><em>discoveries</em></h2>
+      </div>
+
+      <div class="journal-grid" id="featuredBlogsGrid">
+        <!-- Featured blogs will be dynamically populated from admin -->
+        <div class="journal-loading">Loading featured posts...</div>
+      </div>
+
+      <div class="journal-footer">
+        <a href="/blog.html" class="view-all-btn">
+          View All Articles
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact">
+      <div class="contact-content">
+        <div class="section-label">
+          <span class="label-index">05</span>
+          <span class="label-text">GET IN TOUCH</span>
+        </div>
+
+        <h2 class="contact-headline">
+          Let's build something<br><em>extraordinary</em> together.
+        </h2>
+
+        <div class="contact-links">
+          <a href="mailto:vijayadithyabk@gmail.com" class="contact-link primary">
+            <span class="link-text">vijayadithyabk@gmail.com</span>
+            <span class="link-arrow">→</span>
+          </a>
+        </div>
+
+        <div class="contact-socials">
+          <a href="https://linkedin.com/in/vijayadithyabk/" target="_blank" rel="noopener" class="social-link">
+            <span class="social-name">LinkedIn</span>
+            <span class="social-arrow">↗</span>
+          </a>
+          <a href="https://github.com/VijayAdithyaBK" target="_blank" rel="noopener" class="social-link">
+            <span class="social-name">GitHub</span>
+            <span class="social-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-content">
+          <p class="footer-credit">© 2024 Vijay Adithya B K</p>
+          <p class="footer-built">Built with Three.js & Passion</p>
+        </div>
+      </footer>
+    </section>
+
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

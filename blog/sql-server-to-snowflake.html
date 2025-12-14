@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Step-by-step guide to migrating from SQL Server to Snowflake, including schema conversion, data validation, and performance tuning." />
+    <title>SQL Server to Snowflake Migration | Vijay Adithya B K</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body>
+    <canvas id="webgl-canvas"></canvas>
+
+    <header class="header blog-header">
+        <nav class="nav">
+            <a href="/" class="nav-logo">
+                <span class="logo-text" data-text="VA">VA</span>
+            </a>
+
+            <div class="nav-menu">
+                <a href="/#work" class="nav-link">Work</a>
+                <a href="/#about" class="nav-link">About</a>
+                <a href="/blog.html" class="nav-link">Blog</a>
+                <a href="/#contact" class="nav-link">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="blog-post-page">
+        <article class="blog-post">
+            <header class="post-header">
+                <div class="container">
+                    <a href="/blog.html" class="back-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
+                        Back to Journal
+                    </a>
+
+                    <div class="post-meta">
+                        <span class="post-category">Migration</span>
+                        <span class="post-date">October 2024</span>
+                        <span class="post-readtime">15 min read</span>
+                    </div>
+
+                    <h1 class="post-title">SQL Server to Snowflake: A Deep Dive</h1>
+                    <p class="post-subtitle">Step-by-step guide to migrating legacy data warehouses to modern cloud
+                        platforms.</p>
+                </div>
+            </header>
+
+            <div class="post-content">
+                <div class="container">
+
+                    <h2>Why Migrate to Snowflake?</h2>
+                    <p>SQL Server has been a reliable workhorse for data warehousing, but cloud-native platforms like
+                        Snowflake offer compelling advantages:</p>
+
+                    <ul>
+                        <li><strong>Elastic scaling:</strong> Scale compute independently from storage</li>
+                        <li><strong>Pay-per-use:</strong> Only pay for compute when running queries</li>
+                        <li><strong>Zero maintenance:</strong> No index tuning, statistics updates, or storage
+                            management</li>
+                        <li><strong>Concurrency:</strong> Multiple warehouses can query the same data without contention
+                        </li>
+                    </ul>
+
+                    <h2>Phase 1: Assessment</h2>
+                    <p>Before migrating, understand your current state:</p>
+
+                    <div class="code-block">
+                        <pre><code>-- Inventory all tables and their sizes
+SELECT 
+    s.name AS schema_name,
+    t.name AS table_name,
+    SUM(p.rows) AS row_count,
+    SUM(a.total_pages) * 8 / 1024 AS size_mb
+FROM sys.tables t
+INNER JOIN sys.schemas s ON t.schema_id = s.schema_id
+INNER JOIN sys.partitions p ON t.object_id = p.object_id
+INNER JOIN sys.allocation_units a ON p.partition_id = a.container_id
+WHERE p.index_id IN (0, 1)
+GROUP BY s.name, t.name
+ORDER BY size_mb DESC;</code></pre>
+                    </div>
+
+                    <p>Document these critical items:</p>
+                    <ul>
+                        <li>Total data volume and table sizes</li>
+                        <li>Data types used (especially SQL Server-specific types)</li>
+                        <li>Stored procedures and functions</li>
+                        <li>Views and their dependencies</li>
+                        <li>Current query patterns and SLAs</li>
+                    </ul>
+
+                    <h2>Phase 2: Schema Conversion</h2>
+                    <p>Snowflake's data types differ from SQL Server. Here's a mapping guide:</p>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>SQL Server</th>
+                                <th>Snowflake</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>INT, BIGINT</td>
+                                <td>NUMBER(38,0)</td>
+                                <td>Snowflake uses NUMBER for all integers</td>
+                            </tr>
+                            <tr>
+                                <td>VARCHAR(n)</td>
+                                <td>VARCHAR(n)</td>
+                                <td>Direct mapping, max 16MB</td>
+                            </tr>
+                            <tr>
+                                <td>DATETIME</td>
+                                <td>TIMESTAMP_NTZ</td>
+                                <td>No timezone variant</td>
+                            </tr>
+                            <tr>
+                                <td>MONEY</td>
+                                <td>NUMBER(19,4)</td>
+                                <td>Explicit precision</td>
+                            </tr>
+                            <tr>
+                                <td>BIT</td>
+                                <td>BOOLEAN</td>
+                                <td>Native boolean type</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="code-block">
+                        <pre><code>-- Example: Converting a SQL Server table to Snowflake
+-- SQL Server:
+CREATE TABLE customers (
+    customer_id INT IDENTITY(1,1) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    created_at DATETIME DEFAULT GETDATE(),
+    is_active BIT DEFAULT 1
+);
+
+-- Snowflake equivalent:
+CREATE TABLE customers (
+    customer_id NUMBER(38,0) IDENTITY,
+    name VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP(),
+    is_active BOOLEAN DEFAULT TRUE
+);</code></pre>
+                    </div>
+
+                    <h2>Phase 3: Data Migration</h2>
+                    <p>For large datasets, I recommend a staged approach:</p>
+
+                    <ol>
+                        <li><strong>Export to CSV/Parquet:</strong> Use BCP or SSIS to export data</li>
+                        <li><strong>Stage in cloud storage:</strong> Upload to S3 or Azure Blob</li>
+                        <li><strong>COPY INTO Snowflake:</strong> Bulk load from stage</li>
+                    </ol>
+
+                    <div class="code-block">
+                        <pre><code>-- Create external stage
+CREATE STAGE migration_stage
+URL = 's3://my-bucket/migration/'
+CREDENTIALS = (AWS_KEY_ID = '...' AWS_SECRET_KEY = '...');
+
+-- Load data
+COPY INTO customers
+FROM @migration_stage/customers/
+FILE_FORMAT = (TYPE = 'CSV' SKIP_HEADER = 1)
+ON_ERROR = 'CONTINUE';
+
+-- Verify counts
+SELECT COUNT(*) FROM customers;</code></pre>
+                    </div>
+
+                    <h2>Phase 4: Validation</h2>
+                    <p>Never trust migration without validation. Compare:</p>
+
+                    <ul>
+                        <li><strong>Row counts:</strong> Must match exactly</li>
+                        <li><strong>Checksums:</strong> Hash key columns to verify data integrity</li>
+                        <li><strong>Business logic:</strong> Run key reports on both systems</li>
+                    </ul>
+
+                    <div class="code-block">
+                        <pre><code>-- Validation query template
+WITH source_counts AS (
+    SELECT 'customers' AS table_name, COUNT(*) AS cnt FROM source_customers
+    UNION ALL
+    SELECT 'orders', COUNT(*) FROM source_orders
+),
+target_counts AS (
+    SELECT 'customers' AS table_name, COUNT(*) AS cnt FROM target_customers
+    UNION ALL
+    SELECT 'orders', COUNT(*) FROM target_orders
+)
+SELECT 
+    s.table_name,
+    s.cnt AS source_count,
+    t.cnt AS target_count,
+    s.cnt - t.cnt AS difference
+FROM source_counts s
+JOIN target_counts t ON s.table_name = t.table_name;</code></pre>
+                    </div>
+
+                    <h2>Phase 5: Query Migration</h2>
+                    <p>SQL Server T-SQL and Snowflake SQL have syntax differences:</p>
+
+                    <div class="code-block">
+                        <pre><code>-- SQL Server: TOP
+SELECT TOP 10 * FROM customers;
+
+-- Snowflake: LIMIT
+SELECT * FROM customers LIMIT 10;
+
+-- SQL Server: ISNULL
+SELECT ISNULL(column, 'default') FROM table;
+
+-- Snowflake: COALESCE or IFNULL
+SELECT COALESCE(column, 'default') FROM table;
+
+-- SQL Server: GETDATE()
+SELECT GETDATE();
+
+-- Snowflake: CURRENT_TIMESTAMP()
+SELECT CURRENT_TIMESTAMP();</code></pre>
+                    </div>
+
+                    <h2>Common Pitfalls</h2>
+                    <ul>
+                        <li><strong>Case sensitivity:</strong> Snowflake identifiers are case-sensitive when quoted</li>
+                        <li><strong>Date formats:</strong> Explicit casting may be needed</li>
+                        <li><strong>NULL handling:</strong> Some behaviors differ slightly</li>
+                        <li><strong>Stored procedures:</strong> Require rewrite in JavaScript or Snowflake Scripting
+                        </li>
+                    </ul>
+
+                    <h2>Key Takeaways</h2>
+                    <p>SQL Server to Snowflake migration is a significant undertaking, but the benefits are worth it.
+                        Plan thoroughly, validate extensively, and migrate incrementally. The cloud-native benefits of
+                        Snowflake – elastic compute, separation of storage, and zero maintenance – will transform how
+                        your team works with data.</p>
+
+                </div>
+            </div>
+
+            <footer class="post-footer">
+                <div class="container">
+                    <div class="author-card">
+                        <div class="author-info">
+                            <h4>Vijay Adithya B K</h4>
+                            <p>Data Engineer specializing in Snowflake, ETL pipelines, and data platform architecture.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="post-nav">
+                        <a href="/blog/fault-tolerant-pipelines.html" class="btn-secondary">← Fault-Tolerant
+                            Pipelines</a>
+                        <a href="/blog.html" class="btn-primary">View All Articles →</a>
+                    </div>
+                </div>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content container">
+            <p class="footer-credit">© 2024 Vijay Adithya B K</p>
+            <p class="footer-built">Built with Three.js & Passion</p>
+        </div>
+    </footer>
+
+    <script type="module" src="/src/blog.js"></script>
+</body>
+
+</html>

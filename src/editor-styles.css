@@ -1,0 +1,601 @@
+/* ==================== EDITOR STYLES ==================== */
+
+/* Editor Layout */
+.editor-main {
+    position: relative;
+    z-index: 1;
+    margin-top: 60px;
+    min-height: calc(100vh - 60px);
+    padding: 1rem;
+    background: rgba(12, 12, 12, 0.85);
+}
+
+.editor-container {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Sidebar */
+.editor-sidebar {
+    background: rgba(18, 18, 18, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.25rem;
+    height: fit-content;
+    position: sticky;
+    top: 76px;
+}
+
+.sidebar-section {
+    margin-bottom: 1.25rem;
+}
+
+.sidebar-section:last-child {
+    margin-bottom: 0;
+}
+
+.sidebar-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+}
+
+/* Consistent Form Elements - Dark Theme */
+.form-input,
+.form-select,
+.form-textarea,
+.editor-sidebar input,
+.editor-sidebar select,
+.editor-sidebar textarea,
+.modal input,
+.modal select,
+.modal textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(12, 12, 12, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px;
+    color: var(--color-text) !important;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus,
+.editor-sidebar input:focus,
+.editor-sidebar select:focus,
+.editor-sidebar textarea:focus,
+.modal input:focus,
+.modal select:focus,
+.modal textarea:focus {
+    outline: none;
+    border-color: var(--color-accent) !important;
+    box-shadow: 0 0 0 3px rgba(93, 228, 199, 0.15);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder,
+.modal input::placeholder,
+.modal textarea::placeholder {
+    color: var(--color-text-muted) !important;
+}
+
+/* Select dropdown arrow */
+.form-select,
+.editor-sidebar select,
+.modal select {
+    background-color: rgba(12, 12, 12, 0.95) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235de4c7' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    padding-right: 36px;
+    cursor: pointer;
+    /* Remove all browser defaults */
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    outline: none !important;
+}
+
+/* Remove Firefox dotted outline */
+.form-select:-moz-focusring,
+.editor-sidebar select:-moz-focusring,
+.modal select:-moz-focusring {
+    color: transparent !important;
+    text-shadow: 0 0 0 var(--color-text) !important;
+}
+
+/* Select option styling */
+.form-select option,
+.editor-sidebar select option,
+.modal select option {
+    background: #121212 !important;
+    color: var(--color-text) !important;
+    padding: 0.5rem;
+}
+
+.form-textarea,
+.editor-sidebar textarea,
+.modal textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+}
+
+.code-input {
+    font-family: var(--font-mono) !important;
+    font-size: 0.85rem !important;
+    line-height: 1.6;
+    min-height: 200px;
+}
+
+/* Cover Preview */
+.cover-preview {
+    width: 100%;
+    height: 100px;
+    background: rgba(12, 12, 12, 0.8);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+}
+
+.cover-preview span {
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+}
+
+.cover-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-block {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Editor Content */
+.editor-content {
+    background: rgba(18, 18, 18, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Editor Title */
+.editor-title {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: var(--color-text) !important;
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.editor-title:focus {
+    outline: none;
+    box-shadow: none !important;
+}
+
+.editor-title::placeholder {
+    color: var(--color-text-muted) !important;
+}
+
+/* Editor Toolbar */
+.editor-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(12, 12, 12, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-wrap: wrap;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 2px;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 0.25rem;
+}
+
+.toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.toolbar-btn:hover {
+    background: rgba(93, 228, 199, 0.1);
+    color: var(--color-accent);
+}
+
+.toolbar-btn.active {
+    background: rgba(93, 228, 199, 0.2);
+    color: var(--color-accent);
+}
+
+/* Color Picker */
+.color-picker-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.color-picker-wrapper:hover {
+    background: rgba(93, 228, 199, 0.1);
+}
+
+.color-icon {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--color-text-secondary);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.color-picker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+/* Editor Body */
+.editor-body {
+    flex: 1;
+    min-height: 400px;
+    padding: 1.5rem;
+    color: var(--color-text);
+    font-size: 1rem;
+    line-height: 1.8;
+    outline: none;
+    overflow-y: auto;
+}
+
+.editor-body h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 1.5rem 0 1rem;
+    color: var(--color-text);
+}
+
+.editor-body h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1.25rem 0 0.75rem;
+    color: var(--color-text);
+}
+
+#markdownEditor {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    background: rgba(18, 18, 18, 0.98);
+    color: var(--color-text);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    font-family: var(--font-mono);
+    line-height: 1.6;
+    font-size: 0.95rem;
+    resize: vertical;
+}
+
+.editor-body p {
+    margin-bottom: 1rem;
+}
+
+.editor-body ul,
+.editor-body ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.editor-body li {
+    margin-bottom: 0.25rem;
+}
+
+.editor-body a {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+.editor-body code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: rgba(93, 228, 199, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--color-accent);
+}
+
+.editor-body pre {
+    background: rgba(12, 12, 12, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+}
+
+.editor-body pre code {
+    background: none;
+    padding: 0;
+    color: var(--color-text);
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.editor-body img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+/* ==================== MODALS - DARK THEME ==================== */
+
+/* Override all modal content to ensure dark theme */
+.modal .modal-content {
+    background: rgba(18, 18, 18, 0.98) !important;
+    border: 1px solid rgba(93, 228, 199, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    color: var(--color-text);
+}
+
+.modal-large {
+    max-width: 700px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.modal-close:hover {
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.modal .modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.modal .form-group {
+    margin-bottom: 1rem;
+}
+
+.modal .form-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.modal-body {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+/* Fix modal scrollbar */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: rgba(93, 228, 199, 0.3);
+    border-radius: 3px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Upload Area */
+.upload-area {
+    border: 2px dashed rgba(93, 228, 199, 0.4);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+    background: rgba(12, 12, 12, 0.5);
+}
+
+.upload-area:hover {
+    border-color: var(--color-accent);
+    background: rgba(93, 228, 199, 0.08);
+}
+
+.upload-area svg {
+    margin-bottom: 0.5rem;
+    color: var(--color-accent);
+    opacity: 0.7;
+}
+
+.upload-area p {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.upload-area.dragover {
+    border-color: var(--color-accent);
+    background: rgba(93, 228, 199, 0.15);
+}
+
+/* Gallery Grid */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+.gallery-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    background: rgba(12, 12, 12, 0.5);
+}
+
+.gallery-item:hover {
+    border-color: var(--color-accent);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-item-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .gallery-item-overlay {
+    opacity: 1;
+}
+
+.gallery-item-delete {
+    background: #ff4757;
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 900px) {
+    .editor-container {
+        grid-template-columns: 1fr;
+    }
+
+    .editor-sidebar {
+        position: static;
+        order: 1;
+    }
+
+    .editor-content {
+        order: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .editor-main {
+        padding: 0.5rem;
+    }
+
+    .editor-toolbar {
+        padding: 0.5rem;
+        gap: 0.25rem;
+    }
+
+    .toolbar-divider {
+        display: none;
+    }
+
+    .modal .modal-content {
+        padding: 1rem;
+        width: 95%;
+    }
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Blog Dashboard | Admin</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="/src/admin-styles.css">
+</head>
+
+<body>
+    <!-- Cursor Follower -->
+    <div class="cursor" id="cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-outline"></div>
+    </div>
+
+    <!-- Three.js Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="admin-header-content">
+            <a href="/" class="admin-logo">VA <span>Admin</span></a>
+            <nav class="admin-nav">
+                <a href="/admin-dashboard.html" class="admin-nav-link active">Blogs</a>
+                <a href="#" class="admin-nav-link" id="logoutBtn">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div>
+                <h1 class="dashboard-title">Blog Manager</h1>
+                <p class="dashboard-subtitle">Create, edit, and manage your blog posts</p>
+            </div>
+            <button class="btn-primary" id="newBlogBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14" />
+                </svg>
+                New Blog Post
+            </button>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab" data-filter="published">Published</button>
+            <button class="filter-tab" data-filter="draft">Drafts</button>
+            <button class="filter-tab" data-filter="archived">Archived</button>
+        </div>
+
+        <!-- Blog List -->
+        <div class="blog-table-container">
+            <table class="blog-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="blogTableBody">
+                    <!-- Blog rows will be inserted here -->
+                </tbody>
+            </table>
+
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14,2 14,8 20,8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                    <polyline points="10,9 9,9 8,9" />
+                </svg>
+                <h3>No blog posts yet</h3>
+                <p>Create your first blog post to get started</p>
+                <button class="btn-primary" id="emptyNewBtn">Create Blog Post</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Delete Blog Post</h3>
+            <p class="modal-text">Are you sure you want to delete "<span id="deleteTitle"></span>"? This action cannot
+                be undone.</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="cancelDelete">Cancel</button>
+                <button class="btn-danger" id="confirmDelete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/admin-dashboard.js"></script>
+</body>
+
+</html>

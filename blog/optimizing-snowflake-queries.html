@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Learn how to optimize Snowflake queries and reduce warehouse costs by 40% using clustering keys, materialized views, and query profiling." />
+    <title>Optimizing Snowflake Queries at Scale | Vijay Adithya B K</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body>
+    <canvas id="webgl-canvas"></canvas>
+
+    <header class="header blog-header">
+        <nav class="nav">
+            <a href="/" class="nav-logo">
+                <span class="logo-text" data-text="VA">VA</span>
+            </a>
+
+            <div class="nav-menu">
+                <a href="/#work" class="nav-link">Work</a>
+                <a href="/#about" class="nav-link">About</a>
+                <a href="/blog.html" class="nav-link">Journal</a>
+                <a href="/#contact" class="nav-link">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="blog-post-page">
+        <article class="blog-post">
+            <header class="post-header">
+                <div class="container">
+                    <a href="/blog.html" class="back-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
+                        Back to Journal
+                    </a>
+
+                    <div class="post-meta">
+                        <span class="post-category">Performance</span>
+                        <span class="post-date">December 2024</span>
+                        <span class="post-readtime">8 min read</span>
+                    </div>
+
+                    <h1 class="post-title">Optimizing Snowflake Queries at Scale</h1>
+                    <p class="post-subtitle">How I reduced warehouse costs by 40% using clustering keys, materialized
+                        views, and strategic query profiling.</p>
+                </div>
+            </header>
+
+            <div class="post-content">
+                <div class="container">
+
+                    <h2>The Challenge</h2>
+                    <p>When working with enterprise-scale Snowflake deployments, query performance and cost optimization
+                        become critical. I was tasked with optimizing a data platform that was processing over 10TB of
+                        data daily, with warehouse costs spiraling out of control.</p>
+
+                    <p>The key challenges were:</p>
+                    <ul>
+                        <li>Queries taking 10-15 minutes that should complete in seconds</li>
+                        <li>Warehouse auto-scaling causing unpredictable costs</li>
+                        <li>Poor query patterns eating through compute credits</li>
+                        <li>Lack of visibility into query performance</li>
+                    </ul>
+
+                    <h2>Understanding Snowflake's Architecture</h2>
+                    <p>Before diving into optimization, it's crucial to understand how Snowflake processes queries.
+                        Snowflake uses a micro-partitioning architecture where data is automatically divided into
+                        immutable micro-partitions of 50-500MB each.</p>
+
+                    <p>The key insight is that <strong>partition pruning</strong> is your best friend. If Snowflake can
+                        eliminate partitions early in query planning, it reads less data and completes faster.</p>
+
+                    <div class="code-block">
+                        <pre><code>-- Check partition pruning efficiency
+SELECT 
+    query_id,
+    partitions_scanned,
+    partitions_total,
+    ROUND((partitions_scanned / partitions_total) * 100, 2) as scan_percentage
+FROM TABLE(information_schema.query_history())
+WHERE query_type = 'SELECT'
+ORDER BY start_time DESC
+LIMIT 20;</code></pre>
+                    </div>
+
+                    <h2>Strategy 1: Clustering Keys</h2>
+                    <p>Clustering keys tell Snowflake how to organize data within micro-partitions. Choose columns that
+                        you frequently filter on.</p>
+
+                    <div class="code-block">
+                        <pre><code>-- Add clustering key on frequently filtered columns
+ALTER TABLE sales_data CLUSTER BY (sale_date, region);
+
+-- Monitor clustering depth
+SELECT SYSTEM$CLUSTERING_INFORMATION('sales_data');</code></pre>
+                    </div>
+
+                    <p><strong>Result:</strong> Query times dropped from 45 seconds to 3 seconds for date-range queries.
+                    </p>
+
+                    <h2>Strategy 2: Materialized Views</h2>
+                    <p>For complex aggregations that run repeatedly, materialized views pre-compute results and maintain
+                        them automatically.</p>
+
+                    <div class="code-block">
+                        <pre><code>CREATE MATERIALIZED VIEW daily_sales_summary AS
+SELECT 
+    DATE_TRUNC('day', sale_timestamp) as sale_date,
+    region,
+    product_category,
+    SUM(amount) as total_sales,
+    COUNT(*) as transaction_count
+FROM sales_transactions
+GROUP BY 1, 2, 3;</code></pre>
+                    </div>
+
+                    <h2>Strategy 3: Query Profiling</h2>
+                    <p>The Query Profile is invaluable. Look for these red flags:</p>
+                    <ul>
+                        <li><strong>Spillage to disk:</strong> Increase warehouse size</li>
+                        <li><strong>Exploding joins:</strong> Review join conditions</li>
+                        <li><strong>Full table scans:</strong> Add appropriate filters or clustering</li>
+                    </ul>
+
+                    <h2>Strategy 4: Warehouse Right-Sizing</h2>
+                    <p>Bigger isn't always better. I implemented a tiered warehouse strategy:</p>
+                    <ul>
+                        <li><strong>XS warehouse:</strong> Ad-hoc queries, dashboard refreshes</li>
+                        <li><strong>M warehouse:</strong> Standard ETL workloads</li>
+                        <li><strong>L warehouse:</strong> Heavy transformations (with auto-suspend at 60s)</li>
+                    </ul>
+
+                    <h2>Results</h2>
+                    <p>After implementing these optimizations:</p>
+                    <ul>
+                        <li>✅ 40% reduction in compute costs</li>
+                        <li>✅ Average query time reduced from 23s to 4s</li>
+                        <li>✅ 99.9% of queries completing under SLA</li>
+                        <li>✅ Predictable monthly spending</li>
+                    </ul>
+
+                    <h2>Key Takeaways</h2>
+                    <p>Snowflake query optimization is an iterative process. Start with understanding your query
+                        patterns, implement clustering on high-impact tables, use materialized views judiciously, and
+                        continuously monitor with Query Profile.</p>
+
+                    <p>The biggest wins often come from simple changes - proper filtering, appropriate warehouse sizing,
+                        and avoiding anti-patterns like <code>SELECT *</code>.</p>
+
+                </div>
+            </div>
+
+            <footer class="post-footer">
+                <div class="container">
+                    <div class="author-card">
+                        <div class="author-info">
+                            <h4>Vijay Adithya B K</h4>
+                            <p>Data Engineer specializing in Snowflake, ETL pipelines, and data platform architecture.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="post-nav">
+                        <a href="/blog.html" class="btn-secondary">← All Articles</a>
+                        <a href="/blog/fault-tolerant-pipelines.html" class="btn-primary">Next: Fault-Tolerant Pipelines
+                            →</a>
+                    </div>
+                </div>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content container">
+            <p class="footer-credit">© 2024 Vijay Adithya B K</p>
+            <p class="footer-built">Built with Three.js & Passion</p>
+        </div>
+    </footer>
+
+    <script type="module" src="/src/blog.js"></script>
+</body>
+
+</html>

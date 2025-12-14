@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="A comprehensive guide to building fault-tolerant data pipelines with retry logic, dead letter queues, and comprehensive alerting." />
+    <title>Building Fault-Tolerant Data Pipelines | Vijay Adithya B K</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body>
+    <canvas id="webgl-canvas"></canvas>
+
+    <header class="header blog-header">
+        <nav class="nav">
+            <a href="/" class="nav-logo">
+                <span class="logo-text" data-text="VA">VA</span>
+            </a>
+
+            <div class="nav-menu">
+                <a href="/#work" class="nav-link">Work</a>
+                <a href="/#about" class="nav-link">About</a>
+                <a href="/blog.html" class="nav-link">Blog</a>
+                <a href="/#contact" class="nav-link">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="blog-post-page">
+        <article class="blog-post">
+            <header class="post-header">
+                <div class="container">
+                    <a href="/blog.html" class="back-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
+                        Back to Journal
+                    </a>
+
+                    <div class="post-meta">
+                        <span class="post-category">Architecture</span>
+                        <span class="post-date">November 2024</span>
+                        <span class="post-readtime">12 min read</span>
+                    </div>
+
+                    <h1 class="post-title">Building Fault-Tolerant Data Pipelines</h1>
+                    <p class="post-subtitle">Implementing retry logic, dead letter queues, idempotency, and
+                        comprehensive alerting for production-grade ETL systems.</p>
+                </div>
+            </header>
+
+            <div class="post-content">
+                <div class="container">
+
+                    <h2>Why Fault Tolerance Matters</h2>
+                    <p>In production data engineering, things <em>will</em> fail. Networks timeout, APIs return errors,
+                        files are malformed, and databases go down. The difference between a good pipeline and a great
+                        one is how gracefully it handles these failures.</p>
+
+                    <p>A fault-tolerant pipeline:</p>
+                    <ul>
+                        <li>Recovers automatically from transient failures</li>
+                        <li>Preserves failed records for manual review</li>
+                        <li>Never processes the same record twice (idempotency)</li>
+                        <li>Alerts the team before users notice</li>
+                    </ul>
+
+                    <h2>Pattern 1: Exponential Backoff Retry</h2>
+                    <p>Not all failures are permanent. Network glitches, rate limits, and temporary service outages
+                        often resolve themselves. Implement retries with exponential backoff:</p>
+
+                    <div class="code-block">
+                        <pre><code>import time
+from functools import wraps
+
+def retry_with_backoff(max_retries=3, base_delay=1, max_delay=60):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            retries = 0
+            while retries < max_retries:
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    retries += 1
+                    if retries >= max_retries:
+                        raise e
+                    
+                    delay = min(base_delay * (2 ** retries), max_delay)
+                    print(f"Retry {retries}/{max_retries} in {delay}s: {e}")
+                    time.sleep(delay)
+            
+            return None
+        return wrapper
+    return decorator
+
+@retry_with_backoff(max_retries=5, base_delay=2)
+def call_api(endpoint):
+    response = requests.get(endpoint, timeout=30)
+    response.raise_for_status()
+    return response.json()</code></pre>
+                    </div>
+
+                    <h2>Pattern 2: Dead Letter Queue</h2>
+                    <p>When records fail after all retries, don't lose them. Push them to a dead letter queue (DLQ) for
+                        later analysis and reprocessing:</p>
+
+                    <div class="code-block">
+                        <pre><code>class DeadLetterQueue:
+    def __init__(self, table_name):
+        self.table_name = table_name
+    
+    def push(self, record, error, pipeline_name):
+        dlq_record = {
+            'original_record': json.dumps(record),
+            'error_message': str(error),
+            'error_type': type(error).__name__,
+            'pipeline_name': pipeline_name,
+            'failed_at': datetime.utcnow().isoformat(),
+            'retry_count': 0,
+            'status': 'pending'
+        }
+        
+        # Insert into DLQ table
+        self.connection.execute(
+            f"INSERT INTO {self.table_name} VALUES (...)",
+            dlq_record
+        )
+    
+    def get_pending(self, limit=100):
+        return self.connection.execute(
+            f"SELECT * FROM {self.table_name} WHERE status = 'pending' LIMIT {limit}"
+        ).fetchall()</code></pre>
+                    </div>
+
+                    <h2>Pattern 3: Idempotency</h2>
+                    <p>Idempotent operations can be run multiple times without changing the result beyond the first run.
+                        This is essential for safe retries.</p>
+
+                    <div class="code-block">
+                        <pre><code>-- Instead of INSERT (which creates duplicates on retry)
+INSERT INTO target_table (id, value, updated_at)
+VALUES (123, 'data', NOW());
+
+-- Use MERGE/UPSERT for idempotency
+MERGE INTO target_table AS t
+USING (SELECT 123 AS id, 'data' AS value) AS s
+ON t.id = s.id
+WHEN MATCHED THEN UPDATE SET 
+    value = s.value, 
+    updated_at = NOW()
+WHEN NOT MATCHED THEN INSERT 
+    (id, value, updated_at) 
+    VALUES (s.id, s.value, NOW());</code></pre>
+                    </div>
+
+                    <h2>Pattern 4: Checkpointing</h2>
+                    <p>For long-running pipelines, save progress regularly. If the pipeline crashes, it can resume from
+                        the last checkpoint instead of starting over:</p>
+
+                    <div class="code-block">
+                        <pre><code>class CheckpointManager:
+    def __init__(self, pipeline_id, storage):
+        self.pipeline_id = pipeline_id
+        self.storage = storage
+    
+    def save(self, state):
+        self.storage.put(
+            f"checkpoints/{self.pipeline_id}",
+            {
+                'state': state,
+                'timestamp': datetime.utcnow().isoformat()
+            }
+        )
+    
+    def load(self):
+        return self.storage.get(f"checkpoints/{self.pipeline_id}")
+    
+    def clear(self):
+        self.storage.delete(f"checkpoints/{self.pipeline_id}")</code></pre>
+                    </div>
+
+                    <h2>Pattern 5: Comprehensive Alerting</h2>
+                    <p>Set up multi-tier alerting so the right people know at the right time:</p>
+
+                    <ul>
+                        <li><strong>Warning:</strong> Slack notification for recoverable issues</li>
+                        <li><strong>Error:</strong> Email + Slack for failed records</li>
+                        <li><strong>Critical:</strong> PagerDuty for pipeline-down scenarios</li>
+                    </ul>
+
+                    <div class="code-block">
+                        <pre><code>class AlertManager:
+    def __init__(self, config):
+        self.slack = SlackClient(config['slack_webhook'])
+        self.email = EmailClient(config['smtp'])
+        self.pagerduty = PagerDutyClient(config['pd_key'])
+    
+    def alert(self, level, message, context=None):
+        if level == 'warning':
+            self.slack.send(f"⚠️ {message}", context)
+        elif level == 'error':
+            self.slack.send(f"❌ {message}", context)
+            self.email.send("Pipeline Error", message, context)
+        elif level == 'critical':
+            self.slack.send(f"🚨 {message}", context)
+            self.email.send("CRITICAL: Pipeline Down", message, context)
+            self.pagerduty.trigger(message, context)</code></pre>
+                    </div>
+
+                    <h2>Putting It All Together</h2>
+                    <p>A production-ready pipeline combines all these patterns:</p>
+
+                    <ol>
+                        <li>Load checkpoint to determine starting point</li>
+                        <li>Process records with retry logic</li>
+                        <li>Failed records go to DLQ</li>
+                        <li>Save checkpoint after each batch</li>
+                        <li>Alert on failures above threshold</li>
+                    </ol>
+
+                    <h2>Key Takeaways</h2>
+                    <p>Building fault-tolerant pipelines requires thinking about failure modes upfront. Invest in these
+                        patterns early – they pay dividends when things go wrong at 3 AM and the pipeline heals itself
+                        while you sleep.</p>
+
+                </div>
+            </div>
+
+            <footer class="post-footer">
+                <div class="container">
+                    <div class="author-card">
+                        <div class="author-info">
+                            <h4>Vijay Adithya B K</h4>
+                            <p>Data Engineer specializing in Snowflake, ETL pipelines, and data platform architecture.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="post-nav">
+                        <a href="/blog/optimizing-snowflake-queries.html" class="btn-secondary">← Snowflake
+                            Optimization</a>
+                        <a href="/blog/sql-server-to-snowflake.html" class="btn-primary">Next: SQL Server Migration
+                            →</a>
+                    </div>
+                </div>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content container">
+            <p class="footer-credit">© 2024 Vijay Adithya B K</p>
+            <p class="footer-built">Built with Three.js & Passion</p>
+        </div>
+    </footer>
+
+    <script type="module" src="/src/blog.js"></script>
+</body>
+
+</html>

@@ -5,6 +5,7 @@
 
 import * as THREE from 'three';
 import './style.css';
+import './blog-list.css';
 
 // Custom Cursor for blog pages
 class CustomCursor {

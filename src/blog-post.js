@@ -5,6 +5,7 @@
 
 import * as THREE from 'three';
 import './style.css';
+import './blog-post.css';
 
 // ============================================================
 // CUSTOM CURSOR

@@ -1,6 +1,6 @@
 ---
 title: Maarkdown Viewer – A Better Way to Work with Markdown
-slug: markdown-viewer
+slug: maarkdown-viewer
 category: Tools
 excerpt: A fast, web-based Markdown editor with live preview and DOCX/PDF to Markdown conversion.
 date: 2024-12-14
@@ -76,7 +76,7 @@ The focus is on speed, clarity, and maintainability.
 - Developers writing READMEs and docs
 - Technical writers converting legacy documents
 - Students taking structured notes
-- Content creators drafting blog posts
+- Content creators drafting articles
 - Anyone who prefers clean, portable text formats
 
 If Markdown is part of your workflow, this tool fits naturally.

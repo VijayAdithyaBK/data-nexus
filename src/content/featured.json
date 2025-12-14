@@ -2,7 +2,6 @@
     "featuredSlugs": [
         "gemini-chatbot-api",
         "formgenie-smart-autofill",
-        "maarkdown-viewer",
-        "optimizing-snowflake-queries"
+        "maarkdown-viewer"
     ]
 }

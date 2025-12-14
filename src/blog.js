@@ -277,7 +277,7 @@ function loadPublishedBlogs() {
             <p class="blog-card-excerpt">${blog.excerpt || ''}</p>
             <div class="blog-card-footer">
                 <span class="read-time">${blog.readTime || 5} min read</span>
-                <a href="/blog-post.html?slug=${blog.slug}" class="blog-card-link">
+                <a href="blog-post.html?slug=${blog.slug}" class="blog-card-link">
                     Read Article
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M7 17L17 7M17 7H7M17 7V17" />

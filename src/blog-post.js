@@ -184,7 +184,7 @@ function loadBlogPost() {
             <div class="blog-post-error">
                 <h1>Post Not Found</h1>
                 <p>No blog post specified.</p>
-                <a href="/blog.html" class="back-link">← Back to all articles</a>
+                <a href="blog.html" class="back-link">← Back to all articles</a>
             </div>
         `;
         return;
@@ -209,7 +209,7 @@ function loadBlogPost() {
             <div class="blog-post-error">
                 <h1>Post Not Found</h1>
                 <p>The article you're looking for doesn't exist or has been removed.</p>
-                <a href="/blog.html" class="back-link">← Back to all articles</a>
+                <a href="blog.html" class="back-link">← Back to all articles</a>
             </div>
         `;
         return;
@@ -221,7 +221,7 @@ function loadBlogPost() {
             <div class="blog-post-error">
                 <h1>Post Unavailable</h1>
                 <p>This article is not currently published.</p>
-                <a href="/blog.html" class="back-link">← Back to all articles</a>
+                <a href="blog.html" class="back-link">← Back to all articles</a>
             </div>
         `;
         return;

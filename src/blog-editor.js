@@ -194,7 +194,7 @@ function restoreSelection() {
 }
 
 function init() {
-    if (!isAuthenticated()) { window.location.href = '/admin.html'; return; }
+    if (!isAuthenticated()) { window.location.href = 'admin.html'; return; }
     new CustomCursor();
     new AdminScene();
 
@@ -207,15 +207,12 @@ function init() {
     setupToolbar();
     document.getElementById('saveBtn').addEventListener('click', saveBlog);
     document.getElementById('deleteBtn').addEventListener('click', () => {
-        if (confirm('Delete this blog post?')) { deleteBlog(currentBlogId); window.location.href = '/admin-dashboard.html'; }
+        if (confirm('Delete this blog post?')) { deleteBlog(currentBlogId); window.location.href = 'admin-dashboard.html'; }
     });
     setupModals();
     setupImageGallery();
     document.addEventListener('keydown', (e) => { if (e.ctrlKey && e.key === 's') { e.preventDefault(); saveBlog(); } });
-    document.getElementById('previewBtn')?.addEventListener('click', () => { saveBlog(); if (currentBlogId) window.open(`/blog-post.html?slug=${getBlogById(currentBlogId).slug}`, '_blank'); });
-
-    document.addEventListener('keydown', (e) => { if (e.ctrlKey && e.key === 's') { e.preventDefault(); saveBlog(); } });
-    document.getElementById('previewBtn')?.addEventListener('click', () => { saveBlog(); if (currentBlogId) window.open(`/blog-post.html?slug=${getBlogById(currentBlogId).slug}`, '_blank'); });
+    document.getElementById('previewBtn')?.addEventListener('click', () => { saveBlog(); if (currentBlogId) window.open(`blog-post.html?slug=${getBlogById(currentBlogId).slug}`, '_blank'); });
 
     setupPasteHandler();
     setupMarkdownImport();

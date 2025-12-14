@@ -271,7 +271,7 @@ function handleLogin(username, password) {
 
 function initLoginPage() {
     if (isAuthenticated()) {
-        window.location.href = '/admin-dashboard.html';
+        window.location.href = 'admin-dashboard.html';
         return;
     }
 
@@ -294,7 +294,7 @@ function initLoginPage() {
         await new Promise(r => setTimeout(r, 400));
 
         if (handleLogin(username, password)) {
-            window.location.href = '/admin-dashboard.html';
+            window.location.href = 'admin-dashboard.html';
         } else {
             errorDiv.classList.add('show');
             loginBtn.disabled = false;

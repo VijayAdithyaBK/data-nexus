@@ -191,7 +191,7 @@ let currentFilter = 'all';
 let blogToDelete = null;
 
 function init() {
-    if (!isAuthenticated()) { window.location.href = '/admin.html'; return; }
+    if (!isAuthenticated()) { window.location.href = 'admin.html'; return; }
     new CustomCursor();
     new AdminScene();
     setupLogout();
@@ -205,7 +205,7 @@ function setupLogout() {
     document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
         clearSession();
-        window.location.href = '/admin.html';
+        window.location.href = 'admin.html';
     });
 }
 
@@ -276,7 +276,7 @@ function renderBlogList() {
     document.querySelectorAll('[data-action]').forEach(btn => {
         btn.addEventListener('click', () => {
             const { action, id } = btn.dataset;
-            if (action === 'edit') window.location.href = `/admin-editor.html?id=${id}`;
+            if (action === 'edit') window.location.href = `admin-editor.html?id=${id}`;
             else if (action === 'delete') showDeleteModal(id);
             else if (action === 'archive') { archiveBlog(id); showToast('Post archived', 'success'); renderBlogList(); }
             else if (action === 'unarchive') { unarchiveBlog(id); showToast('Post unarchived to drafts', 'success'); renderBlogList(); }
@@ -313,7 +313,7 @@ function hideDeleteModal() { blogToDelete = null; document.getElementById('delet
 
 function setupNewBlogButtons() {
     ['newBlogBtn', 'emptyNewBtn'].forEach(id => {
-        document.getElementById(id)?.addEventListener('click', () => { window.location.href = '/admin-editor.html'; });
+        document.getElementById(id)?.addEventListener('click', () => { window.location.href = 'admin-editor.html'; });
     });
 }
 

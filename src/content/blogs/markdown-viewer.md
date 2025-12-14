@@ -1,6 +1,6 @@
 ---
 title: Maarkdown Viewer – A Better Way to Work with Markdown
-slug: maarkdown-viewer
+slug: markdown-viewer
 category: Tools
 excerpt: A fast, web-based Markdown editor with live preview and DOCX/PDF to Markdown conversion.
 date: 2024-12-14

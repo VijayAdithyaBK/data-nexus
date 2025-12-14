@@ -1,9 +1,5 @@
-import yaml from 'js-yaml'; // We'll need to install this or parse manually. Let's parse manually to avoid deps if possible, or assume simple format. 
-// Actually, let's use a simple regex parser for frontmatter to avoid adding dependencies if not needed, 
-// but marked is available. 
-
-// Let's implement a robust Frontmatter parser without extra deps for now to keep it simple, 
-// matching standard --- ... --- format.
+// Blog loader utility
+// Uses manual regex frontmatter parsing to avoid extra dependencies.
 
 const blogs = import.meta.glob('/src/content/blogs/*.md', { query: '?raw', import: 'default', eager: true });
 

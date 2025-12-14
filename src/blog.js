@@ -231,22 +231,17 @@ class BlogScene {
 // PUBLISHED BLOGS LOADER
 // ============================================================
 
+// ============================================================
+// PUBLISHED BLOGS LOADER
+// ============================================================
+
+import { getAllBlogs } from './utils/blog-loader.js';
+
 function loadPublishedBlogs() {
     const grid = document.querySelector('.blog-grid');
     if (!grid) return;
 
-    // Get blogs from localStorage
-    const BLOG_STORAGE_KEY = 'portfolio_blogs';
-    let blogs = [];
-
-    try {
-        const stored = localStorage.getItem(BLOG_STORAGE_KEY);
-        if (stored) blogs = JSON.parse(stored);
-    } catch (e) {
-        console.error('Error loading blogs:', e);
-    }
-
-    // Filter for PUBLISHED blogs only
+    const blogs = getAllBlogs();
     const publishedBlogs = blogs.filter(blog => blog.status === 'published');
 
     // If no published blogs, show empty state
@@ -271,7 +266,7 @@ function loadPublishedBlogs() {
         <article class="blog-card">
             <div class="blog-card-meta">
                 <span class="blog-category">${blog.category || 'General'}</span>
-                <span class="blog-date">${formatDate(blog.createdAt)}</span>
+                <span class="blog-date">${formatDate(blog.date)}</span>
             </div>
             <h2 class="blog-card-title">${blog.title}</h2>
             <p class="blog-card-excerpt">${blog.excerpt || ''}</p>

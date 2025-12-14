@@ -569,88 +569,54 @@ class ScrollAnimations {
 // FEATURED BLOGS LOADER
 // ============================================================
 
-function loadFeaturedBlogs() {
+// ============================================================
+// FEATURED BLOGS LOADER
+// ============================================================
+
+import { getFeaturedBlogs } from './utils/blog-loader.js';
+
+async function loadFeaturedBlogs() {
     const grid = document.getElementById('featuredBlogsGrid');
     if (!grid) return;
 
-    // Default featured blogs (shown when localStorage is empty)
-    const DEFAULT_FEATURED = [
-        {
-            title: 'Optimizing Snowflake Queries at Scale',
-            slug: 'optimizing-snowflake-queries',
-            category: 'Performance',
-            excerpt: 'Learn how I reduced warehouse costs by 40% using clustering keys, materialized views, and query profiling.',
-            createdAt: '2024-12-01T00:00:00Z',
-            featured: true,
-            status: 'published'
-        },
-        {
-            title: 'Building Fault-Tolerant Data Pipelines',
-            slug: 'fault-tolerant-pipelines',
-            category: 'Architecture',
-            excerpt: 'A comprehensive guide to implementing retry logic, dead letter queues, and alerting for resilient ETL systems.',
-            createdAt: '2024-11-15T00:00:00Z',
-            featured: true,
-            status: 'published'
-        },
-        {
-            title: 'SQL Server to Snowflake: A Deep Dive',
-            slug: 'sql-server-to-snowflake',
-            category: 'Migration',
-            excerpt: 'Step-by-step guide to migrating legacy data warehouses to Snowflake.',
-            createdAt: '2024-10-20T00:00:00Z',
-            featured: true,
-            status: 'published'
-        }
-    ];
-
-    // Get blogs from localStorage
-    const BLOG_STORAGE_KEY = 'portfolio_blogs';
-    let blogs = [];
-
     try {
-        const stored = localStorage.getItem(BLOG_STORAGE_KEY);
-        if (stored) blogs = JSON.parse(stored);
+        const featuredBlogs = await getFeaturedBlogs();
+
+        if (featuredBlogs.length === 0) {
+            grid.innerHTML = '<div class="journal-loading">Coming Soon...</div>';
+            return;
+        }
+
+        // Format date helper
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        }
+
+        // Render featured blogs
+        grid.innerHTML = featuredBlogs.map(blog => `
+            <article class="journal-item">
+                <div class="journal-meta">
+                    <span class="journal-category">${blog.category || 'General'}</span>
+                    <span class="journal-date">${formatDate(blog.date)}</span>
+                </div>
+                <h3 class="journal-title">${blog.title}</h3>
+                <p class="journal-excerpt">${blog.excerpt || ''}</p>
+                <a href="blog-post.html?slug=${blog.slug}" class="journal-link">
+                    <span>Read Article</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                </a>
+            </article>
+        `).join('');
+
+        // Refresh ScrollTrigger
+        ScrollTrigger.refresh();
     } catch (e) {
-        console.error('Error loading blogs:', e);
+        console.error('Failed to load featured blogs:', e);
+        grid.innerHTML = '<div class="journal-loading">Error loading posts.</div>';
     }
-
-    // Filter for featured and published blogs
-    let featuredBlogs = blogs
-        .filter(blog => blog.featured && blog.status === 'published')
-        .slice(0, 3);
-
-    // If no featured blogs from storage, use defaults
-    if (featuredBlogs.length === 0) {
-        featuredBlogs = DEFAULT_FEATURED;
-    }
-
-    // Format date helper
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-    }
-
-    // Render featured blogs
-    grid.innerHTML = featuredBlogs.map(blog => `
-        <article class="journal-item">
-            <div class="journal-meta">
-                <span class="journal-category">${blog.category || 'General'}</span>
-                <span class="journal-date">${formatDate(blog.createdAt)}</span>
-            </div>
-            <h3 class="journal-title">${blog.title}</h3>
-            <p class="journal-excerpt">${blog.excerpt || ''}</p>
-            <a href="blog-post.html?slug=${blog.slug}" class="journal-link">
-                <span>Read Article</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
-            </a>
-        </article>
-    `).join('');
-
-    // No animation to ensure immediate visibility
-    ScrollTrigger.refresh();
 }
 
 // ============================================================

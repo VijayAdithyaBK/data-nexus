@@ -6,6 +6,16 @@ export default defineConfig({
         outDir: 'dist',
         assetsDir: 'assets',
         sourcemap: false,
+        rollupOptions: {
+            input: {
+                main: 'index.html',
+                blog: 'blog.html',
+                blogPost: 'blog-post.html',
+                admin: 'admin.html',
+                adminDashboard: 'admin-dashboard.html',
+                adminEditor: 'admin-editor.html',
+            }
+        }
     },
     server: {
         port: 5173,
